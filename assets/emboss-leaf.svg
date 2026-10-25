@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200">
+  <!-- Cành lá dập nổi trên giấy phong bì: nét sáng + bóng lệch 1px -->
+  <defs>
+    <path id="l" d="M0 0 C 4 -6, 13 -8, 20 -3 C 13 2, 4 3, 0 0 Z"/>
+    <g id="b" fill="none" stroke-width="1" stroke-linecap="round">
+      <path d="M14 198 C 24 150, 40 100, 70 40 C 80 22, 92 10, 104 2"/>
+      <path d="M40 120 C 30 96, 26 72, 30 48"/>
+      <path d="M58 76 C 72 70, 86 66, 100 66"/>
+      <use href="#l" transform="translate(22 170) rotate(-120)"/>
+      <use href="#l" transform="translate(24 160) rotate(-40)"/>
+      <use href="#l" transform="translate(30 140) rotate(-125)"/>
+      <use href="#l" transform="translate(33 130) rotate(-45)"/>
+      <use href="#l" transform="translate(44 104) rotate(-130)"/>
+      <use href="#l" transform="translate(48 96) rotate(-50)"/>
+      <use href="#l" transform="translate(60 72) rotate(-135)"/>
+      <use href="#l" transform="translate(64 64) rotate(-55)"/>
+      <use href="#l" transform="translate(78 34) rotate(-140)"/>
+      <use href="#l" transform="translate(84 26) rotate(-60)"/>
+      <use href="#l" transform="translate(32 96) rotate(-150) scale(.8)"/>
+      <use href="#l" transform="translate(30 76) rotate(-100) scale(.8)"/>
+      <use href="#l" transform="translate(29 58) rotate(-140) scale(.7)"/>
+      <use href="#l" transform="translate(76 70) rotate(-10) scale(.8)"/>
+      <use href="#l" transform="translate(90 66) rotate(-30) scale(.7)"/>
+    </g>
+  </defs>
+  <use href="#b" stroke="#8a7350" stroke-opacity=".16" transform="translate(.8 1)"/>
+  <use href="#b" stroke="#ffffff" stroke-opacity=".95"/>
+</svg>

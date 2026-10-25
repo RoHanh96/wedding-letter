@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="20" viewBox="0 0 180 20" fill="none" stroke="#a89a7c" stroke-width="1" stroke-linecap="round">
+  <!-- Đường hoa văn ngăn cách dưới tiêu đề -->
+  <path d="M4 10 H66"/>
+  <path d="M114 10 H176"/>
+  <path d="M70 10 C 74 4, 80 4, 82 8 C 83 11, 80 13, 78 11"/>
+  <path d="M110 10 C 106 4, 100 4, 98 8 C 97 11, 100 13, 102 11"/>
+  <path d="M90 4 L94 10 L90 16 L86 10 Z" fill="#b49a6a" stroke="#b49a6a"/>
+</svg>

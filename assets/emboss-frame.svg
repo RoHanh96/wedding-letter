@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Khung dập nổi (blind emboss) cổ điển: viền đôi, góc có hoa văn cuộn.
+       Dùng làm border-image cắt 60px nên góc không bị méo khi khung dài/ngắn khác nhau. -->
+  <defs>
+    <g id="corner">
+      <path d="M34 8 H60"/>
+      <path d="M8 34 V60"/>
+      <path d="M44 14 H60"/>
+      <path d="M14 44 V60"/>
+      <!-- hai vòng cuộn đối xứng ở góc -->
+      <path d="M34 8 C 24 8, 18 13, 21 19 C 24 25, 32 22, 30 16 C 29 13, 25 13, 24 16"/>
+      <path d="M8 34 C 8 24, 13 18, 19 21 C 25 24, 22 32, 16 30 C 13 29, 13 25, 16 24"/>
+      <!-- lá chéo và hạt -->
+      <path d="M22 22 C 28 23, 35 29, 37 37 C 30 35, 24 29, 22 22 Z"/>
+      <path d="M26 27 L 34 34"/>
+      <circle cx="41" cy="41" r="1.6"/>
+      <path d="M44 14 C 40 14, 38 16, 38 19"/>
+      <path d="M14 44 C 14 40, 16 38, 19 38"/>
+    </g>
+    <g id="frame" stroke-width="1.1">
+      <use href="#corner"/>
+      <use href="#corner" transform="translate(240 0) scale(-1 1)"/>
+      <use href="#corner" transform="translate(0 240) scale(1 -1)"/>
+      <use href="#corner" transform="translate(240 240) scale(-1 -1)"/>
+      <path d="M60 8 H180 M60 14 H180 M60 232 H180 M60 226 H180"/>
+      <path d="M8 60 V180 M14 60 V180 M232 60 V180 M226 60 V180"/>
+      <!-- hoa văn nhỏ giữa cạnh trên và dưới -->
+      <path d="M108 14 C 112 20, 128 20, 132 14 M114 14 C 116 18, 124 18, 126 14"/>
+      <path d="M108 226 C 112 220, 128 220, 132 226 M114 226 C 116 222, 124 222, 126 226"/>
+    </g>
+  </defs>
+  <!-- bóng phía dưới-phải + sáng phía trên-trái = cảm giác giấy được dập nổi -->
+  <use href="#frame" stroke="#7a6342" stroke-opacity=".22" transform="translate(.7 .9)"/>
+  <use href="#frame" stroke="#ffffff" stroke-opacity=".95"/>
+</svg>

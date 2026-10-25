@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 316" preserveAspectRatio="none" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Khung oval viền vàng đôi, nơ nét mảnh ở đỉnh với hai dải đuôi vắt theo khung.
+       Khớp với khung ảnh tỉ lệ 0.74 (xem .oval-frame trong CSS) -->
+  <ellipse cx="112" cy="167.4" rx="106" ry="141" stroke="#ad9465" stroke-width="1.5"/>
+  <ellipse cx="112" cy="167.4" rx="102.2" ry="137.2" stroke="#cbb68b" stroke-width=".7"/>
+
+  <g stroke="#9c8558">
+    <!-- hai cánh nơ: chỉ có nét, có nét đôi bên trong -->
+    <path d="M110 24 C 98 12, 82 2, 72 6 C 62 10, 66 24, 80 28 C 92 31, 104 28, 110 24 Z" stroke-width="1.3"/>
+    <path d="M106 24 C 96 15, 84 9, 77 11 C 71 14, 74 22, 83 25" stroke-width=".6" opacity=".8"/>
+    <path d="M114 24 C 126 12, 142 2, 152 6 C 162 10, 158 24, 144 28 C 132 31, 120 28, 114 24 Z" stroke-width="1.3"/>
+    <path d="M118 24 C 128 15, 140 9, 147 11 C 153 14, 150 22, 141 25" stroke-width=".6" opacity=".8"/>
+
+    <!-- hai dải đuôi vắt theo đường cong của khung, đầu cắt chữ V -->
+    <path d="M109 27 C 96 31, 80 36, 66 43 C 56 48, 48 54, 40 62" stroke-width="1.2"/>
+    <path d="M108 30 C 98 35, 86 40, 74 46 C 64 51, 56 57, 48 66" stroke-width=".9"/>
+    <path d="M40 62 L 43 67 L 48 66" stroke-width="1"/>
+    <path d="M115 27 C 128 31, 144 36, 158 43 C 168 48, 176 54, 184 62" stroke-width="1.2"/>
+    <path d="M116 30 C 126 35, 138 40, 150 46 C 160 51, 168 57, 176 66" stroke-width=".9"/>
+    <path d="M184 62 L 181 67 L 176 66" stroke-width="1"/>
+
+    <!-- nút thắt -->
+    <path d="M108 21.5 C 110 20, 114 20, 116 21.5 C 117.5 23.5, 117.5 26, 116 27.5 C 114 29, 110 29, 108 27.5 C 106.5 26, 106.5 23.5, 108 21.5 Z"
+          fill="#efe3c8" stroke-width="1.1"/>
+  </g>
+</svg>
