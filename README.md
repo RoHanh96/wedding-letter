@@ -20,8 +20,10 @@ Các bản giao diện cũ (tông trắng và xanh nhạt) được lưu ở th�
 
 Toàn bộ nội dung nằm trong `js/config.js`: tên, bố mẹ, sự kiện, ngày âm lịch, địa chỉ, link bản đồ.
 
-- **Ảnh cưới:** chép ảnh (khung hiển thị hình tròn nên chọn ảnh có hai người ở giữa; rộng khoảng 1200px, dưới 500KB) vào `assets/photo.jpg`, rồi sửa `photo: "assets/photo.jpg"`.
-- **Album ảnh:** chép ảnh vào `assets/gallery/` (ví dụ `01.jpg`, `02.jpg`...), rồi liệt kê đường dẫn trong `gallery` theo thứ tự muốn hiển thị. Ảnh đầu tiên được hiển thị to nhất. Mỗi ảnh nên rộng khoảng 1200px và nặng dưới 400KB để trang tải nhanh. Để `gallery: []` thì album tự ẩn.
+- **Tấm thiệp trong phong bì:** là ảnh `assets/letter-card.webp`, cắt nguyên từ mẫu thiệp in để giữ đúng nét chữ thư pháp, nên sửa tên/ngày trong `config.js` sẽ không đổi tấm thiệp này. Muốn đổi thì thay ảnh khác cùng tỉ lệ 770:1118 (ảnh hiện tại đã phóng 2x và làm nét để hiển thị rõ trên điện thoại). Các chữ viết tay còn lại dùng font Ms Madi, màu `#7B2D2A`.
+- **Ảnh cưới (khung oval cào):** `assets/photo.jpg`, đã cắt tỉ lệ 0.74 (rộng 900px).
+- **Album (sổ lưu niệm):** ảnh trong `assets/gallery/`, liệt kê ở `gallery`. Bố cục polaroid rải chồng đẹp nhất với 4 ảnh theo thứ tự dọc, dọc, ngang, dọc; mỗi ảnh nên rộng khoảng 1100px, dưới 200KB. Ảnh gốc lưu ở `../wedding-letter-backups/anh-cuoi-goc/`.
+- **Hộp mừng cưới:** cuối trang, bấm hộp quà để mở mã QR. Chép ảnh QR ngân hàng vào `assets/` rồi điền đường dẫn vào `gift[].qr` (để `""` thì hiện khung chờ, không có nút tải).
 - **Nhạc nền:** chép file vào `assets/music.mp3`. Nếu chưa có file thì nút nhạc tự ẩn.
 
 ## Link mời theo tên khách

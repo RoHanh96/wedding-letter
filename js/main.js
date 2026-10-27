@@ -88,21 +88,22 @@
     $$('[data-initials]').forEach((n) => (n.textContent = initials));
     $$('[data-seal]').forEach((n) => (n.textContent = initials.replace(/ /g, '')));
     $$('[data-letter-date]').forEach((n) => (n.textContent = letterDate()));
-    // khoảng trắng rộng (en space) vì dấu & kiểu thư pháp dính sát chữ
-    $$('[data-short-names]').forEach((n) => (n.textContent = `${C.groom.short}\u2002&\u2002${C.bride.short}`));
+    $$('[data-short-names]').forEach((n) => (n.textContent = `${C.groom.short} & ${C.bride.short}`));
     $$('[data-letter-place]').forEach((n) => {
       n.textContent = C.letterPlace || '';
       n.hidden = !C.letterPlace;
     });
-    $$('[data-guest-lower]').forEach((n) => (n.textContent = invitedName || C.defaultGuest.toLowerCase()));
-    $('[data-groom]').textContent = C.groom.name;
-    $('[data-bride]').textContent = C.bride.name;
+    $$('[data-groom]').forEach((n) => (n.textContent = C.groom.name));
+    $$('[data-bride]').forEach((n) => (n.textContent = C.bride.name));
 
     ['groom', 'bride'].forEach((side) => {
       const f = C.families[side];
       const box = $(`[data-family="${side}"]`);
       box.append(icon('house'), el('h3', '', f.label));
-      [f.father, f.mother].filter(Boolean).forEach((name) => box.append(el('p', '', name)));
+      // gói tên bố mẹ trong một khối canh trái để "Ông"/"Bà" thẳng hàng, khối vẫn nằm giữa cột
+      const names = el('div', 'family-names');
+      [f.father, f.mother].filter(Boolean).forEach((name) => names.append(el('p', '', name)));
+      box.append(names);
       if (f.address) box.append(el('p', 'addr', f.address));
     });
 
@@ -143,6 +144,7 @@
 
     renderCalendar();
     renderGallery();
+    renderGift();
     decoratePaper();
   }
 
@@ -197,24 +199,52 @@
     $('#calendar').append(card);
   }
 
+  // Sổ lưu niệm: ảnh polaroid rải chồng lên nhau (vị trí theo thứ tự trong CSS), dán băng keo giấy
   function renderGallery() {
     const photos = C.gallery || [];
     if (!photos.length) return;
-    const grid = $('#galleryGrid');
+    const book = $('#galleryGrid');
     photos.forEach((src, i) => {
-      const item = el('button', 'gallery-item');
-      item.type = 'button';
-      item.setAttribute('aria-label', `Xem ảnh ${i + 1}`);
+      const shot = el('button', `shot shot-${i + 1}`);
+      shot.type = 'button';
+      shot.setAttribute('aria-label', `Xem ảnh ${i + 1}`);
+      shot.style.setProperty('--i', i);
       const img = el('img');
       img.src = src;
       img.alt = '';
       img.loading = 'lazy';
       img.decoding = 'async';
-      item.append(img);
-      item.addEventListener('click', () => openLightbox(i));
-      grid.append(item);
+      img.addEventListener('load', () => shot.classList.toggle('landscape', img.naturalWidth > img.naturalHeight));
+      shot.append(el('i', 'tape'), img);
+      shot.addEventListener('click', () => openLightbox(i));
+      book.append(shot);
     });
     $('#gallery').hidden = false;
+  }
+
+  // Hộp mừng cưới: mỗi người một thẻ có ảnh QR và nút tải ảnh
+  function renderGift() {
+    const cards = $('#giftCards');
+    (C.gift || []).forEach((g) => {
+      const card = el('div', 'gift-card');
+      card.append(el('p', 'label', 'Mừng cưới đến'), el('p', 'gift-who', g.label), el('p', 'gift-name', g.name));
+      const qr = el('div', 'gift-qr');
+      if (g.qr) {
+        const img = el('img');
+        img.src = g.qr;
+        img.alt = `Mã QR mừng cưới ${g.label.toLowerCase()}`;
+        qr.append(img);
+        const dl = el('a', 'btn btn-ghost', 'Tải ảnh QR');
+        dl.href = g.qr;
+        dl.download = `QR-mung-cuoi-${g.label.toLowerCase().replace(/\s+/g, '-')}`;
+        card.append(qr, dl);
+      } else {
+        qr.classList.add('empty');
+        qr.append(el('span', '', 'Mã QR sẽ được cập nhật'));
+        card.append(qr);
+      }
+      cards.append(card);
+    });
   }
 
   /* ---------- Xem ảnh phóng to ---------- */
@@ -265,6 +295,37 @@
     const dx = e.clientX - lbStartX;
     lbStartX = null;
     if (Math.abs(dx) > 40) showPhoto(lbIndex + (dx < 0 ? 1 : -1));
+  });
+
+  /* ---------- Hộp mừng cưới ---------- */
+
+  const giftModal = $('#giftModal');
+  const giftBox = $('#giftOpen');
+
+  async function openGift() {
+    giftBox.classList.add('opening'); // nắp hộp nhấc lên trước khi cửa sổ hiện ra
+    await wait(450);
+    giftModal.hidden = false;
+    document.body.classList.add('lb-open');
+    requestAnimationFrame(() => giftModal.classList.add('show'));
+    $('.gift-close').focus();
+  }
+
+  function closeGift() {
+    giftModal.classList.remove('show');
+    document.body.classList.remove('lb-open');
+    giftBox.classList.remove('opening');
+    setTimeout(() => (giftModal.hidden = true), 300);
+    giftBox.focus();
+  }
+
+  giftBox.addEventListener('click', openGift);
+  $('.gift-close').addEventListener('click', closeGift);
+  giftModal.addEventListener('click', (e) => {
+    if (e.target === giftModal) closeGift();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !giftModal.hidden) closeGift();
   });
 
   /* ---------- Nhạc nền ---------- */
@@ -327,9 +388,10 @@
     // Phong bì xoay thẳng và zoom to, chừa đủ chỗ phía trên cho nắp và lá thư rút ra
     const w = envelope.offsetWidth;
     const h = envelope.offsetHeight;
-    const above = 0.98; // tấm thiệp dọc nhô lên khoảng 87% chiều cao phong bì, chừa thêm chút lề trên
+    const above = 1.7; // tấm thiệp dọc nhô lên khoảng 162% chiều cao phong bì, chừa thêm chút lề trên
     const avail = innerHeight * 0.86; // chừa khoảng dưới cùng cho dòng "Chạm để đọc tiếp"
-    const zoom = Math.max(1, Math.min((innerWidth * 0.98) / w, (avail * 0.96) / ((1 + above) * h)));
+    // điện thoại thì phóng to; PC phong bì đã to sẵn nên có thể thu nhỏ lại cho vừa cả tấm thiệp
+    const zoom = Math.min((innerWidth * 0.98) / w, (avail * 0.96) / ((1 + above) * h));
     const box = envStage.getBoundingClientRect();
     const targetCenter = (avail - (1 + above) * h * zoom) / 2 + (above + 0.5) * h * zoom;
     intro.style.setProperty('--zoom', zoom);
@@ -366,6 +428,7 @@
 
   // Lá thư rút ra phóng to thành khung ảnh (kỹ thuật FLIP)
   async function expandCard() {
+    window.scrollTo(0, 0); // phòng trường hợp trang đã bị cuộn sẵn
     const from = letter.getBoundingClientRect();
     const to = card.getBoundingClientRect();
     card.style.transition = 'none';
@@ -621,6 +684,18 @@
 
   /* ---------- Khởi tạo ---------- */
 
+  // Thiệp luôn mở từ đầu trang: bỏ "#..." trên link và không để trình duyệt khôi phục vị trí cuộn cũ,
+  // nếu không màn cào ảnh sẽ bị lệch lên khi tải lại trang
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  window.scrollTo(0, 0);
+
+  // "Xem chi tiết": cuộn mượt tới phần chi tiết mà không thêm #families vào link
+  cue.addEventListener('click', (e) => {
+    e.preventDefault();
+    $('#families').scrollIntoView({ behavior: REDUCED ? 'auto' : 'smooth' });
+  });
+
   fillContent();
   photo.src = C.photo;
 
@@ -628,7 +703,7 @@
     ? Promise.all([
         document.fonts.load('italic 500 40px "Cormorant Garamond"'),
         document.fonts.load('600 14px "Cormorant Garamond"'),
-        document.fonts.load('40px "Great Vibes"'),
+        document.fonts.load('40px "Ms Madi"'),
       ]).catch(() => {})
     : Promise.resolve();
   fontsReady.then(drawCover);

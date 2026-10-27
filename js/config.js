@@ -43,7 +43,7 @@ window.WEDDING = {
       icon: "glasses", // glasses = ly rượu, rings = nhẫn cưới, heart = trái tim
       datetime: "2026-11-13T18:00",
       lunar: "Tức ngày 5 tháng 10 năm Bính Ngọ",
-      venue: "Nhà sinh hoạt cộng đồng tổ 6",
+      venue: "Nhà Sinh Hoạt Cộng Đồng Tổ 6",
       address: "Phường Xuân Phương, Hà Nội",
       mapUrl: "https://maps.app.goo.gl/4MLwXhPXxbin71JZ7",
     },
@@ -60,17 +60,21 @@ window.WEDDING = {
     },
   ],
 
-  photo: "assets/photo.svg", // đổi thành "assets/photo.jpg" khi có ảnh thật (ảnh dọc 3:4)
+  photo: "assets/photo.jpg", // ảnh trong khung oval cào (đã cắt tỉ lệ 0.74)
 
-  // Album ảnh: chép ảnh vào assets/gallery/ rồi liệt kê ở đây (nên 4–9 ảnh). Để [] thì ẩn album.
-  // Đang dùng ảnh mẫu để xem bố cục.
+  // Album kiểu sổ lưu niệm: bố cục cho 4 ảnh theo thứ tự dọc, dọc, ngang, dọc.
+  // (ảnh 04 dùng làm nền phần hộp mừng cưới, không đưa vào album)
   gallery: [
-    "assets/photo.svg",
-    "assets/photo.svg",
-    "assets/photo.svg",
-    "assets/photo.svg",
-    "assets/photo.svg",
-    "assets/photo.svg",
+    "assets/gallery/01.jpg",
+    "assets/gallery/02.jpg",
+    "assets/gallery/03.jpg",
+    "assets/gallery/05.jpg",
+  ],
+
+  // Hộp mừng cưới: điền đường dẫn ảnh QR ngân hàng (vd "assets/qr-chu-re.jpg"); để "" thì hiện khung chờ
+  gift: [
+    { label: "Chú rể", name: "Nguyễn Văn Hãnh", qr: "" },
+    { label: "Cô dâu", name: "Nguyễn Lan Anh", qr: "" },
   ],
   music: "assets/music.mp3", // bài "A Thousand Years"
 
