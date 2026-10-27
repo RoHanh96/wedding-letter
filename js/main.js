@@ -14,10 +14,9 @@
   const WEEKDAYS = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
 
   const intro = $('#intro');
-  const envStage = $('#envStage');
   const envelope = $('#envelope');
+  const envStage = $('#envStage');
   const letter = $('#letter');
-  const seal = $('#seal');
   const stage = $('#stage');
   const card = $('#photoCard');
   const frame = $('#photoFrame');
@@ -86,15 +85,12 @@
     document.title = `Thiệp cưới ${C.groom.short} & ${C.bride.short}`;
     $$('[data-guest]').forEach((n) => (n.textContent = guest));
     $$('[data-initials]').forEach((n) => (n.textContent = initials));
-    $$('[data-seal]').forEach((n) => (n.textContent = initials.replace(/ /g, '')));
     $$('[data-letter-date]').forEach((n) => (n.textContent = letterDate()));
     $$('[data-short-names]').forEach((n) => (n.textContent = `${C.groom.short} & ${C.bride.short}`));
     $$('[data-letter-place]').forEach((n) => {
       n.textContent = C.letterPlace || '';
       n.hidden = !C.letterPlace;
     });
-    $$('[data-groom]').forEach((n) => (n.textContent = C.groom.name));
-    $$('[data-bride]').forEach((n) => (n.textContent = C.bride.name));
 
     ['groom', 'bride'].forEach((side) => {
       const f = C.families[side];
@@ -134,9 +130,9 @@
       const input = el('input');
       input.type = 'checkbox';
       input.name = 'events';
-      input.value = ev.title;
-      input.checked = true;
-      label.append(input, el('span', '', `${ev.title} (${ev.side})`));
+      // không tích sẵn, khách tự chọn; giá trị ghi vào Sheet kèm bên tổ chức, vd "Tiệc Mừng Cưới (Nhà Gái)"
+      input.value = `${ev.title} (${ev.side})`;
+      label.append(input, el('span', '', input.value));
       choices.append(label);
     });
 
@@ -148,17 +144,9 @@
     decoratePaper();
   }
 
-  // Mép con dấu sáp gồ ghề và mép giấy xé: đa giác nhiều đỉnh, lệch nhẹ ngẫu nhiên nhưng cố định
+  // Mép giấy xé: đa giác nhiều đỉnh, lệch nhẹ ngẫu nhiên nhưng cố định
   function decoratePaper() {
     const root = document.documentElement.style;
-    const blob = [];
-    for (let i = 0; i < 60; i++) {
-      const a = (i / 60) * Math.PI * 2;
-      const r = 48 + Math.sin(a * 3 + 1) * 1.2 + Math.sin(a * 7 + 2) * 0.7 + Math.sin(a * 13) * 0.35;
-      blob.push(`${(50 + r * Math.cos(a)).toFixed(1)}% ${(50 + r * Math.sin(a)).toFixed(1)}%`);
-    }
-    root.setProperty('--blob', `polygon(${blob.join(',')})`);
-
     const jag = (i, amp) => (Math.sin(i * 12.9898) * 43758.5453 % 1 + 1) % 1 * amp;
     const edge = [];
     const n = 40;
@@ -215,7 +203,7 @@
       img.loading = 'lazy';
       img.decoding = 'async';
       img.addEventListener('load', () => shot.classList.toggle('landscape', img.naturalWidth > img.naturalHeight));
-      shot.append(el('i', 'tape'), img);
+      shot.append(img);
       shot.addEventListener('click', () => openLightbox(i));
       book.append(shot);
     });
@@ -236,8 +224,14 @@
         qr.append(img);
         const dl = el('a', 'btn btn-ghost', 'Tải ảnh QR');
         dl.href = g.qr;
-        dl.download = `QR-mung-cuoi-${g.label.toLowerCase().replace(/\s+/g, '-')}`;
+        dl.download = g.qr.split('/').pop(); // tên file không dấu, có sẵn đuôi ảnh
         card.append(qr, dl);
+        if (g.account) {
+          const copy = el('button', 'btn btn-ghost btn-copy', 'Copy STK');
+          copy.type = 'button';
+          copy.addEventListener('click', () => copyText(g.account, copy));
+          card.append(copy);
+        }
       } else {
         qr.classList.add('empty');
         qr.append(el('span', '', 'Mã QR sẽ được cập nhật'));
@@ -245,6 +239,33 @@
       }
       cards.append(card);
     });
+  }
+
+  // Chép số tài khoản để dán vào app ngân hàng; trình duyệt cũ dùng cách chọn chữ rồi copy
+  function copyText(text, btn) {
+    const label = btn.textContent;
+    const done = (msg) => {
+      btn.textContent = msg;
+      clearTimeout(btn._t);
+      btn._t = setTimeout(() => (btn.textContent = label), 2200);
+    };
+    const fallback = () => {
+      const ta = el('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0';
+      document.body.append(ta);
+      ta.select();
+      ta.setSelectionRange(0, text.length);
+      const ok = document.execCommand('copy');
+      ta.remove();
+      done(ok ? 'Đã chép ✓' : text);
+    };
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(() => done('Đã chép ✓'), fallback);
+    } else {
+      fallback();
+    }
   }
 
   /* ---------- Xem ảnh phóng to ---------- */
@@ -385,10 +406,10 @@
       playMusic();
     }
 
-    // Phong bì xoay thẳng và zoom to, chừa đủ chỗ phía trên cho nắp và lá thư rút ra
+    // Phong bì zoom to, chừa đủ chỗ phía trên cho nắp và tấm thiệp rút ra
     const w = envelope.offsetWidth;
     const h = envelope.offsetHeight;
-    const above = 1.7; // tấm thiệp dọc nhô lên khoảng 162% chiều cao phong bì, chừa thêm chút lề trên
+    const above = 1.41; // tấm thiệp nhô lên khoảng 134% chiều cao phong bì (đáy vẫn nằm trong túi), chừa thêm chút lề trên
     const avail = innerHeight * 0.86; // chừa khoảng dưới cùng cho dòng "Chạm để đọc tiếp"
     // điện thoại thì phóng to; PC phong bì đã to sẵn nên có thể thu nhỏ lại cho vừa cả tấm thiệp
     const zoom = Math.min((innerWidth * 0.98) / w, (avail * 0.96) / ((1 + above) * h));
@@ -398,25 +419,22 @@
     intro.style.setProperty('--dy', `${targetCenter - (box.top + box.height / 2)}px`);
     // phong bì lún nhẹ như bị ấn tay rồi mới nhấc lên zoom to
     intro.classList.add('opening', 'pressed');
-    await wait(170);
+    await wait(120);
     intro.classList.remove('pressed');
     intro.classList.add('zoomed');
-    await wait(1150);
+    await wait(500); // phong bì gần zoom xong thì bắt đầu mở luôn cho nhanh
 
-    // con dấu rung, hiện vết nứt rồi mới tách đôi
-    seal.classList.add('cracking');
-    await wait(340);
-    seal.classList.add('broken');
-    envelope.classList.add('untied'); // ruy băng tuột ra, nhánh hoa rơi đi cùng lúc con dấu tách
-    await wait(500);
+    // ruy băng, con dấu mờ dần trên chính phong bì đó (ảnh phong bì sạch nằm ngay bên dưới)
+    envelope.classList.add('untied');
+    await wait(250);
 
     envelope.classList.add('flap-open');
-    await wait(550); // nắp vừa lật qua phương thẳng đứng
+    await wait(350); // nắp vừa lật qua phương thẳng đứng
     envelope.classList.add('flap-behind');
-    await wait(650);
+    await wait(250);
 
     envelope.classList.add('letter-out');
-    await wait(1750);
+    await wait(1150);
 
     // Thiệp dừng lại cho khách đọc, chạm vào màn hình mới sang phần ảnh cưới
     intro.classList.add('reading');
@@ -426,7 +444,7 @@
     await expandCard();
   }
 
-  // Lá thư rút ra phóng to thành khung ảnh (kỹ thuật FLIP)
+  // Tấm thiệp phóng to thành khung ảnh (kỹ thuật FLIP)
   async function expandCard() {
     window.scrollTo(0, 0); // phòng trường hợp trang đã bị cuộn sẵn
     const from = letter.getBoundingClientRect();
@@ -476,6 +494,11 @@
   let lastPoint = null;
   let lastCheck = 0;
 
+  // ảnh lớp phủ trước khi cào: khung oval lá trên giấy ngà
+  const coverImg = new Image();
+  coverImg.src = 'assets/scratch-cover.webp';
+  const coverReady = coverImg.decode().catch(() => {});
+
   function drawCover() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     cssW = frame.clientWidth;
@@ -486,28 +509,14 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.globalCompositeOperation = 'source-over';
 
-    const bg = ctx.createLinearGradient(0, 0, cssW, cssH);
-    bg.addColorStop(0, '#f8f3e9');
-    bg.addColorStop(0.5, '#efe7d8');
-    bg.addColorStop(1, '#e4d9c5');
-    ctx.fillStyle = bg;
+    // nền giấy ngà cùng màu ảnh, rồi vẽ ảnh khung oval lá sao cho vòng oval trong ảnh
+    // nằm gọn trong khung nơ (vòng oval trong ảnh 853x1280: tâm (426, 612), bán kính dọc ~482px)
+    ctx.fillStyle = '#efece2';
     ctx.fillRect(0, 0, cssW, cssH);
-
-    // hoa văn hạt nhỏ như giấy dập nổi
-    ctx.fillStyle = 'rgba(255, 255, 255, .55)';
-    for (let y = 10; y < cssH; y += 18) {
-      for (let x = (y / 18) % 2 ? 9 : 0; x < cssW; x += 18) {
-        ctx.beginPath();
-        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
-        ctx.fill();
-      }
+    if (coverImg.complete && coverImg.naturalWidth) {
+      const s = (cssH / 2) * 0.9 / 482;
+      ctx.drawImage(coverImg, cssW / 2 - 426 * s, cssH / 2 - 612 * s, coverImg.naturalWidth * s, coverImg.naturalHeight * s);
     }
-
-    ctx.strokeStyle = 'rgba(180, 154, 106, .6)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.ellipse(cssW / 2, cssH / 2, cssW / 2 - 14.5, cssH / 2 - 14.5, 0, 0, Math.PI * 2);
-    ctx.stroke();
 
     ctx.globalCompositeOperation = 'destination-out';
     ctx.lineCap = 'round';
@@ -639,6 +648,16 @@
     status.classList.toggle('error', Boolean(isError));
   }
 
+  // Trình duyệt hay tự khôi phục ô đã tích khi tải lại trang; luôn bắt đầu với form trống
+  const resetChoices = () => {
+    form.querySelectorAll('input[name="attend"], input[name="events"]').forEach((i) => (i.checked = false));
+    attendOnly.hidden = true;
+  };
+  resetChoices();
+  window.addEventListener('pageshow', (e) => {
+    if (e.persisted && !form.hidden) resetChoices();
+  });
+
   form.addEventListener('change', (e) => {
     if (e.target.name === 'attend') attendOnly.hidden = e.target.value !== 'yes';
   });
@@ -674,6 +693,8 @@
     try {
       // Apps Script không trả header CORS nên dùng no-cors; request vẫn tới được Sheet
       await fetch(C.rsvpEndpoint, { method: 'POST', mode: 'no-cors', body: payload });
+      // gửi xong chỉ còn lời cảm ơn: ẩn cả biểu tượng, tiêu đề, lời dẫn của mục
+      $('#rsvp').classList.add('done');
       form.hidden = true;
       $('#rsvpThanks').hidden = false;
     } catch (err) {
@@ -706,7 +727,7 @@
         document.fonts.load('40px "Ms Madi"'),
       ]).catch(() => {})
     : Promise.resolve();
-  fontsReady.then(drawCover);
+  Promise.all([fontsReady, coverReady]).then(drawCover);
 
   // Xoay màn hình trước khi bắt đầu cào thì vẽ lại lớp phủ cho đúng kích thước
   window.addEventListener('resize', () => {

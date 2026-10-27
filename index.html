@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Ms+Madi&display=swap&subset=vietnamese" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=69">
+  <link rel="stylesheet" href="css/style.css?v=101">
 </head>
 <body class="locked">
 
@@ -75,28 +75,15 @@
         <div class="letter-clip">
           <div class="letter" id="letter">
             <!-- ảnh tấm thiệp lấy nguyên từ mẫu in để giữ đúng nét chữ thư pháp -->
-            <img class="letter-card" src="assets/letter-card.webp?v=3" alt="Thiệp mời Nguyễn Văn Hãnh và Nguyễn Lan Anh, 13 và 14 tháng 11 năm 2026, Hà Nội, Hải Phòng" width="1540" height="2236">
+            <img class="letter-card" src="assets/letter-card.webp?v=4" alt="Thiệp mời Nguyễn Văn Hãnh và Nguyễn Lan Anh, 13 và 14 tháng 11 năm 2026, Hà Nội, Hải Phòng" width="1540" height="2636">
           </div>
         </div>
-        <div class="env-pocket">
-          <div class="env-left"></div>
-          <div class="env-right"></div>
-          <div class="env-bottom"></div>
-          <img class="env-emboss" src="assets/emboss-leaf.svg" alt="">
-        </div>
+        <!-- Thân và nắp cắt từ ảnh phong bì thật đã xoá ruy băng, con dấu (thân bỏ thêm dải bóng của nắp) -->
+        <div class="env-pocket"><img src="assets/envelope-pocket.webp" alt=""></div>
         <div class="env-flap"><div class="flap-face"></div></div>
-        <div class="ribbon" aria-hidden="true">
-          <i class="rb rb-top"></i>
-          <i class="rb rb-bottom"></i>
-          <i class="rb rb-tail rb-tail-l"></i>
-          <i class="rb rb-tail rb-tail-r"></i>
-        </div>
-        <img class="sprig" src="assets/flowers-sprig.webp" alt="" aria-hidden="true">
-        <div class="seal" id="seal" aria-hidden="true">
-          <span class="seal-half seal-l"><i data-seal></i></span>
-          <span class="seal-half seal-r"><i data-seal></i></span>
-        </div>
-        <!-- Ảnh chụp phong bì thật, hiển thị lúc đóng; mờ dần đúng lúc con dấu tách -->
+        <!-- Con dấu sáp và nơ ruy băng phía dưới (tách từ ảnh gốc), giữ nguyên ở giữa phong bì khi mở -->
+        <img class="env-seal" src="assets/envelope-seal.webp" alt="">
+        <!-- Ảnh phong bì thật nguyên vẹn; chạm vào thì mờ đi, chỉ còn đoạn ruy băng phía trên và nhánh hoa là biến mất -->
         <img class="env-photo" src="assets/envelope-photo.webp?v=4" alt="">
       </div>
     </div>
@@ -122,7 +109,8 @@
         <span class="orn" aria-hidden="true"></span>
       </div>
       <div class="greeting" id="greeting">
-        <p class="greeting-names" data-short-names></p>
+        <!-- tên viết tay dạng ảnh (font thư pháp không có sẵn trên web) -->
+        <p class="greeting-names"><img src="assets/names-short.webp" alt="Hãnh &amp; Anh" width="1500" height="299"></p>
         <p class="greeting-date" data-letter-date></p>
         <p class="greeting-place" data-letter-place></p>
         <img class="swans" src="assets/swans.webp?v=2" alt="">
@@ -149,11 +137,8 @@
     <section class="sec couple reveal">
       <div class="names">
         <svg class="ico" aria-hidden="true"><use href="#i-heart"/></svg>
-        <p class="role">Chú rể</p>
-        <h1 class="name" data-groom></h1>
-        <p class="amp">&amp;</p>
-        <p class="role">Cô dâu</p>
-        <h1 class="name" data-bride></h1>
+        <!-- tên viết tay dạng ảnh (font thư pháp không có sẵn trên web) -->
+        <h1 class="names-art"><img src="assets/names-full.webp?v=2" alt="Chú rể Nguyễn Văn Hãnh và cô dâu Nguyễn Lan Anh" width="1560" height="985"></h1>
         <p class="orn" aria-hidden="true"></p>
       </div>
     </section>
@@ -168,7 +153,8 @@
       <p class="sec-sub">Những khoảnh khắc của chúng mình</p>
       <!-- Sổ lưu niệm: ảnh polaroid rải chồng, dán băng keo giấy; chạm để phóng to -->
       <div class="scrapbook" id="galleryGrid">
-        <img class="scrap-sprig" src="assets/flowers-sprig.webp" alt="" aria-hidden="true">
+        <img class="scrap-sprig scrap-sprig-1" src="assets/flowers-sprig.webp" alt="" aria-hidden="true">
+        <img class="scrap-sprig scrap-sprig-2" src="assets/flowers-sprig.webp" alt="" aria-hidden="true">
       </div>
     </section>
 
@@ -177,7 +163,7 @@
       <h2 class="sec-title">Xác nhận tham dự</h2>
       <p class="sec-sub">Để gia đình chuẩn bị chu đáo, bạn vui lòng xác nhận giúp chúng mình nhé.</p>
 
-      <form id="rsvpForm" novalidate>
+      <form id="rsvpForm" novalidate autocomplete="off">
         <label class="field">
           <span>Họ và tên</span>
           <input type="text" name="name" required maxlength="80" autocomplete="name" placeholder="Tên của bạn">
@@ -193,20 +179,21 @@
 
         <div class="attend-only" id="attendOnly" hidden>
           <fieldset class="field">
-            <legend>Tham dự</legend>
+            <legend>Tham dự <em>(chọn một hoặc cả hai)</em></legend>
             <div class="choices" id="eventChoices"></div>
           </fieldset>
 
-          <label class="field">
-            <span>Số người</span>
-            <select name="guests">
-              <option value="1">1 người</option>
-              <option value="2">2 người</option>
-              <option value="3">3 người</option>
-              <option value="4">4 người</option>
-              <option value="5">5 người trở lên</option>
-            </select>
-          </label>
+          <!-- nút chọn thay cho ô select: popup select gốc của trình duyệt hay lệch vị trí -->
+          <fieldset class="field">
+            <legend>Số người</legend>
+            <div class="choices choices-count">
+              <label class="choice"><input type="radio" name="guests" value="1" checked><span>1</span></label>
+              <label class="choice"><input type="radio" name="guests" value="2"><span>2</span></label>
+              <label class="choice"><input type="radio" name="guests" value="3"><span>3</span></label>
+              <label class="choice"><input type="radio" name="guests" value="4"><span>4</span></label>
+              <label class="choice"><input type="radio" name="guests" value="5+"><span>5+</span></label>
+            </div>
+          </fieldset>
         </div>
 
         <label class="field">
@@ -288,7 +275,7 @@
   </button>
   <audio id="bgm" loop preload="auto"></audio>
 
-  <script src="js/config.js?v=27"></script>
-  <script src="js/main.js?v=38"></script>
+  <script src="js/config.js?v=32"></script>
+  <script src="js/main.js?v=64"></script>
 </body>
 </html>

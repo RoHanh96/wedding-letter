@@ -16,14 +16,14 @@ window.WEDDING = {
   families: {
     groom: {
       label: "Nhà Trai",
-      father: "Ông Nguyễn Văn Hảnh",
-      mother: "Bà Bùi Thị Mềm",
+      father: "Ông: Nguyễn Văn Hảnh",
+      mother: "Bà: Bùi Thị Mềm",
       address: "",
     },
     bride: {
       label: "Nhà Gái",
       father: "",
-      mother: "Bà Nguyễn Thị Thu Thuỷ",
+      mother: "Bà: Nguyễn Thị Thu Thuỷ",
       address: "",
     },
   },
@@ -71,15 +71,15 @@ window.WEDDING = {
     "assets/gallery/05.jpg",
   ],
 
-  // Hộp mừng cưới: điền đường dẫn ảnh QR ngân hàng (vd "assets/qr-chu-re.jpg"); để "" thì hiện khung chờ
+  // Hộp mừng cưới: ảnh QR ngân hàng (để "" thì hiện khung chờ) và số tài khoản cho nút "Copy STK"
   gift: [
-    { label: "Chú rể", name: "Nguyễn Văn Hãnh", qr: "" },
-    { label: "Cô dâu", name: "Nguyễn Lan Anh", qr: "" },
+    { label: "Chú rể", name: "Nguyễn Văn Hãnh", bank: "MB Bank", account: "0972183010", qr: "assets/qr-chu-re.webp" },
+    { label: "Cô dâu", name: "Nguyễn Lan Anh", bank: "MB Bank", account: "0326654295", qr: "assets/qr-co-dau.webp" },
   ],
   music: "assets/music.mp3", // bài "A Thousand Years"
 
   // Link Web App của Google Apps Script (xem README). Để trống thì form chưa gửi được.
-  rsvpEndpoint: "",
+  rsvpEndpoint: "https://script.google.com/macros/s/AKfycbwRNzD8XO5poll75llOWwrTBpw5CyF1FM2X-uHe-jhEKVRDXCBE40NxyKR4q4oMsx_cjw/exec",
 
   // Dòng nơi tổ chức in trên tấm thiệp và dưới ảnh cưới (để "" thì ẩn)
   letterPlace: "Hà Nội · Hải Phòng",

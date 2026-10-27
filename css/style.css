@@ -29,6 +29,8 @@
   /* tiêu đề các mục: olive đậm cùng tông nút bấm; tên khách: đồng cổ */
   --title: #5c5f3f;
   --bronze: #8a6334;
+  /* dòng gợi ý chạm / cào: xanh olive xám */
+  --sprout: #77785a;
   --ease: cubic-bezier(.55, 0, .25, 1);
 }
 
@@ -76,7 +78,7 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 }
 
 /* Cụm hoa trang trí */
-.sprig, .event::after { filter: drop-shadow(0 6px 8px rgba(80, 60, 30, .16)); }
+.event::after { filter: drop-shadow(0 6px 8px rgba(80, 60, 30, .16)); }
 
 
 /* Đường hoa văn ngăn cách */
@@ -112,13 +114,13 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
   position: relative;
   z-index: 1;
   transform: rotate(0deg);
-  transition: transform calc(1100ms * var(--k)) cubic-bezier(.65, 0, .35, 1);
+  transition: transform calc(700ms * var(--k)) cubic-bezier(.65, 0, .35, 1);
 }
 .intro.zoomed .env-stage {
   transform: translateY(var(--dy, 0)) scale(var(--zoom, 1.2)) rotate(0deg);
   transition-timing-function: cubic-bezier(.45, .05, .2, 1.06); /* dừng có chút nảy */
 }
-.intro.pressed .env-stage { transform: scale(.965); transition: transform calc(170ms * var(--k)) ease-out; }
+.intro.pressed .env-stage { transform: scale(.965); transition: transform calc(120ms * var(--k)) ease-out; }
 
 .env {
   position: relative;
@@ -131,22 +133,19 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 .env:focus-visible { box-shadow: 0 0 0 3px var(--olive-l); border-radius: 6px; }
 .env.away { opacity: 0; transform: translateY(40px) scale(.96); }
 
-/* Lòng phong bì: giấy lót hoa nhỏ + bóng đổ của cả phong bì xuống nền */
+/* Lòng phong bì (lộ ra khi nắp mở): giấy trắng ngà + bóng đổ của cả phong bì, giống bóng của ảnh phong bì thật */
 .env-inside {
   position: absolute;
   inset: 0;
-  border-radius: 4px;
   background:
-    linear-gradient(180deg, rgba(60, 45, 25, .38), rgba(60, 45, 25, .08) 40%, rgba(60, 45, 25, 0) 70%),
-    var(--tex-strong),
-    var(--mottle) 0 0 / 420px,
-    linear-gradient(180deg, #cdc3b5, #d6ccbf);
-  box-shadow:
-    0 0 0 1px rgba(120, 100, 70, .12),
-    -10px 16px 22px -6px rgba(70, 52, 25, .38),
-    -2px 3px 5px rgba(70, 52, 25, .2);
+    linear-gradient(180deg, rgba(120, 100, 70, .1), rgba(120, 100, 70, 0) 40%),
+    var(--tex),
+    linear-gradient(180deg, #f6f1e8, #fbf8f2);
+  box-shadow: -9px 14px 24px rgba(70, 52, 25, .3), -1px 2px 4px rgba(70, 52, 25, .25);
 }
 
+/* Thiệp dọc nằm trong phong bì, rút lên khi mở. Đáy thiệp vẫn nằm thấp hơn mũi chữ V của túi
+   để che kín lòng phong bì (không lộ khoảng trắng bên trong) */
 .letter-clip {
   position: absolute;
   inset: 0;
@@ -156,235 +155,79 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 }
 .letter {
   position: absolute;
-  left: 6%;
-  right: 6%;
+  left: 2%;
+  right: 2%;
   top: 6%;
-  aspect-ratio: 770 / 1118;
+  aspect-ratio: 770 / 1318;
   filter: drop-shadow(0 4px 10px rgba(70, 52, 25, .22));
-  transition: transform calc(1200ms * var(--k)) cubic-bezier(.45, 0, .2, 1);
+  transform-origin: 50% 85%;
 }
-.letter { transform-origin: 50% 85%; }
-.env.letter-out .letter { animation: pull-out calc(1700ms * var(--k)) cubic-bezier(.33, 0, .2, 1) forwards; }
+.env.letter-out .letter { animation: pull-out calc(1100ms * var(--k)) cubic-bezier(.33, 0, .2, 1) forwards; }
 @keyframes pull-out {
   0%   { transform: translateY(0) rotate(0); filter: drop-shadow(0 3px 6px rgba(70, 52, 25, .2)); }
   14%  { transform: translateY(-5%) rotate(-.7deg); }
   22%  { transform: translateY(-4%) rotate(-.4deg); }
-  70%  { transform: translateY(-91.5%) rotate(.9deg); }
-  86%  { transform: translateY(-99%) rotate(-.35deg); }
-  100% { transform: translateY(-97.5%) rotate(0); filter: drop-shadow(0 14px 18px rgba(70, 52, 25, .3)); }
+  70%  { transform: translateY(-61%) rotate(.9deg); }
+  86%  { transform: translateY(-66%) rotate(-.35deg); }
+  100% { transform: translateY(-64.6%) rotate(0); filter: drop-shadow(0 14px 18px rgba(70, 52, 25, .3)); }
 }
 .letter-card { display: block; width: 100%; height: 100%; border-radius: 2px; }
+
 .event h2, .sec-title, .cal-month, .event-time {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .6), 0 -.5px 0 rgba(90, 70, 40, .12);
 }
 
-/* Hai nắp bên và nắp dưới: giấy ngà dập nổi, mỗi lớp một sắc độ */
+/* Thân phong bì (túi): ảnh phong bì sạch, bỏ phần nắp tam giác phía trên.
+   Mép nắp đo trên ảnh 922x700: từ (0, 56) và (922, 68) xuống mũi nắp (465, 502). */
 .env-pocket {
   position: absolute;
   inset: 0;
   z-index: 3;
-  border-radius: 4px;
-  overflow: hidden;
+  clip-path: polygon(0 8%, 50.43% 71.7%, 100% 9.73%, 100% 100%, 0 100%);
   pointer-events: none;
 }
-.env-left, .env-right, .env-bottom { position: absolute; inset: 0; }
-/* Ánh nắng ấm chiếu từ góc trên phải, góc dưới trái hơi tối, khớp hướng sáng của ảnh nền */
-.env-pocket::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(225deg, rgba(255, 244, 222, .28), rgba(255, 244, 222, 0) 45%, rgba(60, 45, 25, .1));
-  pointer-events: none;
-}
-.env-left, .env-right { filter: drop-shadow(0 0 2px rgba(90, 70, 40, .26)); }
-.env-bottom { filter: drop-shadow(0 -2px 3px rgba(90, 70, 40, .24)); }
-.env-left::before, .env-right::before, .env-bottom::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-}
-.env-left::before {
-  background: var(--tex-strong), var(--mottle) 0 0 / 420px, linear-gradient(90deg, #d9cfc2, #e0d7cb);
-  clip-path: polygon(0 0, 52% 55%, 0 100%);
-}
-.env-right::before {
-  background: var(--tex-strong), var(--mottle) 0 0 / 420px, linear-gradient(270deg, #dad0c4, #e1d8cc);
-  clip-path: polygon(100% 0, 48% 55%, 100% 100%);
-}
-.env-bottom::before {
-  background: var(--tex-strong), var(--mottle) 0 0 / 420px, linear-gradient(0deg, #d2c8ba, #ddd3c7);
-  clip-path: polygon(0 100%, 46% 55%, 50% 53%, 54% 55%, 100% 100%);
-}
+.env-pocket img { display: block; width: 100%; height: 100%; }
 
-/* Nắp trên: bản lề ở mép trên, lật về phía người xem rồi nằm ra sau lá thư */
+/* Nắp trên: cùng ảnh phong bì sạch, bản lề ở mép trên, lật lên rồi nằm ra sau tấm thiệp */
 .env-flap {
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
-  height: 56.2%; /* mũi nắp trùng tâm con dấu (55.4%) */
+  height: 71.7%; /* tới mũi nắp */
   z-index: 4;
   transform-origin: 50% 0;
   transform: perspective(1000px) rotateX(0deg);
-  transition: transform calc(1100ms * var(--k)) var(--ease);
-  filter: drop-shadow(0 4px 5px rgba(90, 70, 40, .28));
+  transition: transform calc(700ms * var(--k)) var(--ease);
+  /* bóng nắp đổ xuống thân phong bì (ảnh thân đã bỏ dải bóng này để khi mở nắp không còn viền tối) */
+  filter: drop-shadow(0 3px 5px rgba(60, 45, 25, .36));
 }
 .env.flap-open .env-flap { transform: perspective(1000px) rotateX(180deg); }
-.env-flap::after {
-  content: "";
+.flap-face, .env-flap::after {
   position: absolute;
   inset: 0;
-  clip-path: polygon(0 0, 100% 0, 54% 94%, 52% 97.5%, 50% 98.5%, 48% 97.5%, 46% 94%);
+  clip-path: polygon(0 0, 100% 0, 100% 13.57%, 50.43% 100%, 0 11.16%);
+}
+.flap-face { background: url("../assets/envelope-clean.webp") 0 0 / 100% 139.47% no-repeat; }
+/* bóng tối dần khi nắp dựng đứng */
+.env-flap::after {
+  content: "";
   background: linear-gradient(180deg, rgba(60, 45, 25, .08), rgba(60, 45, 25, .4));
   opacity: 0;
   pointer-events: none;
 }
-.env.flap-open .env-flap::after { animation: flap-shade calc(1100ms * var(--k)) var(--ease); }
+.env.flap-open .env-flap::after { animation: flap-shade calc(700ms * var(--k)) var(--ease); }
 @keyframes flap-shade { 0% { opacity: 0; } 45% { opacity: 1; } 60% { opacity: .55; } 100% { opacity: 0; } }
-.flap-face {
-  position: absolute;
-  inset: 0;
-  background: var(--tex-strong), var(--mottle) 120px 40px / 420px, linear-gradient(180deg, #e3dacf, #ddd3c7);
-  clip-path: polygon(0 0, 100% 0, 54% 94%, 52% 97.5%, 50% 98.5%, 48% 97.5%, 46% 94%);
-}
-/* Khi nắp lật qua nửa vòng: nằm sau lá thư và lộ mặt trong có giấy lót */
+/* Khi nắp lật qua nửa vòng: nằm sau tấm thiệp, lộ mặt trong là giấy trắng ngà như lòng phong bì */
 .env.flap-behind .env-flap { z-index: 1; filter: none; }
 .env.flap-behind .flap-face {
   background:
-    linear-gradient(0deg, rgba(255, 250, 240, .35), rgba(255, 250, 240, 0) 60%),
-    var(--tex-strong),
-    var(--mottle) 60px 0 / 420px,
-    linear-gradient(180deg, #d8cec1, #e2d9cd);
+    linear-gradient(0deg, rgba(120, 100, 70, .08), rgba(120, 100, 70, 0) 60%),
+    var(--tex),
+    linear-gradient(180deg, #f8f4ec, #f2ece2);
 }
 
-/* Cành lá dập nổi ở góc trái thân phong bì */
-.env-emboss { position: absolute; left: 3%; top: 12%; width: 34%; opacity: .22; }
-
-/* Ruy băng lụa xanh olive quấn dọc phong bì, tuột ra khi con dấu tách */
-.ribbon { position: absolute; inset: 0; z-index: 5; pointer-events: none; filter: drop-shadow(0 1px 1.5px rgba(60, 60, 30, .3)); }
-.rb {
-  position: absolute;
-  left: 47.5%;
-  width: 7%;
-  /* hai dải voan mảnh song song */
-  background: linear-gradient(90deg,
-    rgba(132, 140, 118, .85) 0 44%, rgba(132, 140, 118, .35) 44% 56%, rgba(132, 140, 118, .85) 56% 100%);
-  transition: transform calc(800ms * var(--k)) cubic-bezier(.3, 0, .3, 1), opacity calc(800ms * var(--k)) ease;
-}
-.rb-top { top: 0; height: 56%; }
-.rb-bottom { top: 55.4%; bottom: 0; }
-.rb-tail {
-  top: 55.4%;
-  height: 32%;
-  width: 3.4%;
-  left: 49.3%;
-  background: rgba(132, 140, 118, .8);
-  transform-origin: 50% 0;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%);
-  opacity: .95;
-}
-.rb-tail-l { transform: rotate(16deg); }
-.rb-tail-r { transform: rotate(-23deg); }
-.env.untied .rb-top { transform: translateY(-40%); opacity: 0; }
-.env.untied .rb-bottom { transform: translateY(40%); opacity: 0; }
-.env.untied .rb-tail-l { transform: rotate(40deg) translateY(20%); opacity: 0; }
-.env.untied .rb-tail-r { transform: rotate(-35deg) translateY(20%); opacity: 0; }
-
-/* Nhánh hoa trắng cài dưới con dấu */
-.sprig {
-  position: absolute;
-  left: 43.5%;
-  bottom: 45%;
-  width: 17%;
-  z-index: 5;
-  transform-origin: 50% 100%;
-  transform: rotate(24deg);
-  transition: transform calc(800ms * var(--k)) cubic-bezier(.3, 0, .3, 1), opacity calc(800ms * var(--k)) ease;
-}
-.env.untied .sprig { transform: translate(25%, -8%) rotate(48deg); opacity: 0; }
-
-/* Con dấu sáp màu ngà ở mũi nắp; mép gồ ghề lấy từ --blob do JS tạo */
-.seal {
-  position: absolute;
-  left: 50.8%;
-  top: 55.4%;
-  width: 19.2%;
-  aspect-ratio: 1;
-  z-index: 6;
-  transform: translate(-50%, -50%);
-  filter: drop-shadow(0 3px 4px rgba(80, 60, 30, .35));
-}
-.seal::after {
-  content: "";
-  position: absolute;
-  inset: -7px;
-  border-radius: 50%;
-  border: 1px solid var(--gold);
-  animation: ring 2.4s ease-out infinite;
-}
-.seal-half {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  /* rơi nhanh dần như có trọng lực, mờ đi ở nửa sau */
-  transition: transform calc(900ms * var(--k)) cubic-bezier(.5, 0, .9, .45), opacity calc(450ms * var(--k)) ease calc(400ms * var(--k));
-}
-.seal.cracking .seal-half { animation: seal-shake calc(340ms * var(--k)) ease-in-out; }
-@keyframes seal-shake {
-  0%, 100% { transform: rotate(0); }
-  25% { transform: rotate(-4deg); }
-  50% { transform: rotate(3deg); }
-  75% { transform: rotate(-2deg); }
-}
-/* vết nứt chạy dọc giữa con dấu */
-.seal::before {
-  content: "";
-  position: absolute;
-  left: 46%;
-  top: 8%;
-  z-index: 2;
-  width: 8%;
-  height: 84%;
-  background: rgba(88, 66, 36, .75);
-  filter: drop-shadow(1px 0 0 rgba(255, 250, 240, .7));
-  clip-path: polygon(45% 0, 60% 18%, 40% 36%, 62% 55%, 42% 74%, 58% 100%, 50% 100%, 32% 74%, 52% 55%, 30% 36%, 50% 18%, 35% 0);
-  opacity: 0;
-  transition: opacity calc(200ms * var(--k)) ease;
-}
-.seal.cracking::before { opacity: 1; }
-.seal.broken::before { opacity: 0; }
-.seal-half::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: var(--blob, circle(50%));
-  background: radial-gradient(circle at 38% 32%, #ece4d6 0%, #d6cab8 50%, #c3b5a3 85%, #b1a28c 100%);
-}
-.seal-half::after {
-  content: "";
-  position: absolute;
-  inset: 17%;
-  border-radius: 50%;
-  border: 1px solid rgba(140, 115, 75, .35);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
-}
-.seal-half i {
-  position: relative;
-  z-index: 1;
-  font-family: var(--script);
-  font-style: normal;
-  font-size: min(6.2vw, 36px);
-  color: #9c8c74;
-  text-shadow: 0 1px 0 rgba(255, 250, 240, .7), 0 -1px 0 rgba(90, 70, 40, .3);
-}
-/* Khi chưa tách, nửa trái là hình tròn đầy đủ nằm dưới nửa phải nên không lộ đường nối */
-.seal-r { clip-path: inset(0 0 0 50%); }
-.seal.broken .seal-l { clip-path: inset(0 50% 0 0); transform: translate(-26px, 72px) rotate(-40deg); opacity: 0; }
-.seal.broken .seal-r { transform: translate(24px, 76px) rotate(44deg); opacity: 0; }
-.seal.broken::after { display: none; }
-
-/* Ảnh chụp phong bì thật phủ lên phong bì dựng bằng code; mờ đi khi con dấu tách */
+/* Ảnh chụp phong bì thật (có ruy băng, con dấu) phủ lên trên; mờ đi khi mở thư */
 .env-photo {
   position: absolute;
   left: 0;
@@ -396,9 +239,18 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
   /* bóng đổ theo hướng nắng như các vật khác trong ảnh nền */
   filter: drop-shadow(-9px 14px 12px rgba(70, 52, 25, .3)) drop-shadow(-1px 2px 2px rgba(70, 52, 25, .25));
   pointer-events: none;
-  transition: opacity calc(350ms * var(--k)) ease;
+  transition: opacity calc(300ms * var(--k)) ease;
 }
 .env.untied .env-photo { opacity: 0; }
+/* Con dấu và nơ dưới: nằm trên tấm thiệp, đứng yên khi nắp mở và thiệp rút lên */
+.env-seal {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 
 .tap-hint {
   position: relative;
@@ -408,7 +260,7 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
   font-weight: 500;
   line-height: 1.35;
   text-align: center;
-  color: var(--ink);
+  color: var(--sprout);
   text-shadow: 0 0 10px rgba(250, 245, 236, .95), 0 0 22px rgba(250, 245, 236, .85);
   transition: opacity calc(400ms * var(--k)) ease;
 }
@@ -542,10 +394,12 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 .scratch-hint {
   position: absolute;
   inset: 0 0 auto;
-  font-family: var(--script);
-  font-size: 33px;
-  line-height: 1.25;
-  color: var(--wine);
+  /* cùng kiểu chữ với dòng "Chạm vào phong bì để mở thư" */
+  font-size: 21px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--sprout);
   opacity: 0;
   transition: opacity calc(500ms * var(--k)) ease;
 }
@@ -558,7 +412,7 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
   transition: opacity calc(900ms * var(--k)) ease, transform calc(900ms * var(--k)) var(--ease);
 }
 .greeting.show { opacity: 1; transform: none; }
-.greeting-names { font-family: var(--script); font-size: 54px; line-height: 1.15; color: var(--wine); }
+.greeting-names img { display: block; width: min(88%, 340px); height: auto; margin: 0 auto; }
 .greeting-date { margin-top: 8px; font-size: 16px; font-weight: 600; letter-spacing: .24em; color: var(--ink); }
 .greeting-place { font-size: 12px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
 .greeting .swans { display: block; width: 190px; margin: 14px auto 0; }
@@ -696,15 +550,7 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 .couple { padding: 48px 0 64px; }
 .names { position: relative; z-index: 1; }
 .names .ico { margin-bottom: 16px; }
-.name {
-  font-family: var(--script);
-  font-weight: 400;
-  font-size: clamp(46px, 13vw, 62px);
-  line-height: 1.2;
-  color: var(--wine);
-  margin: 2px 0 4px;
-}
-.amp { margin: 4px 0 10px; font-family: var(--script); font-size: 40px; line-height: 1; color: var(--wine); }
+.names-art img { display: block; width: min(100%, 400px); height: auto; margin: 4px auto 6px; }
 
 /* Lịch tháng cưới */
 .calendar { padding-top: 12px; }
@@ -826,16 +672,17 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 .shot {
   position: absolute;
   display: block;
-  padding: 7px 7px 26px;
+  /* khung ảnh xanh đậm */
+  padding: 6px;
   border: 0;
-  background: var(--tex), #fffdf8;
-  box-shadow: 0 14px 22px -12px rgba(60, 45, 25, .5), 0 1px 2px rgba(60, 45, 25, .15);
+  background: #3b4a33;
+  box-shadow: 0 14px 22px -12px rgba(30, 40, 25, .6), 0 1px 2px rgba(30, 40, 25, .25);
   cursor: zoom-in;
   transform: rotate(var(--rot)) translateY(0);
   transition: transform .45s cubic-bezier(.3, .7, .3, 1), box-shadow .45s ease;
 }
-.shot img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--cream); }
-.shot.landscape img { aspect-ratio: 3 / 2; }
+.shot > img:first-child { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--cream); }
+.shot.landscape > img:first-child { aspect-ratio: 3 / 2; }
 .shot:hover, .shot:focus-visible { z-index: 5; transform: rotate(0deg) translateY(-6px) scale(1.03); box-shadow: 0 22px 30px -14px rgba(60, 45, 25, .55); outline: none; }
 /* vị trí và góc nghiêng từng ảnh (thứ tự: dọc, dọc, ngang, dọc; ảnh thứ 5 nếu có thì đặt cạnh ảnh thứ 4) */
 .shot-1 { left: 0; top: 0; width: 54%; --rot: -6deg; z-index: 1; }
@@ -846,26 +693,10 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 .shot-5 { left: 46%; top: 67%; width: 53%; --rot: -5deg; z-index: 5; }
 .shot:nth-of-type(n+6) { position: relative; left: auto; top: auto; width: 70%; margin: 24px auto 0; }
 
-/* băng keo giấy: bán trong suốt, hai đầu răng cưa */
-.tape {
-  position: absolute;
-  left: 50%;
-  top: -12px;
-  z-index: 2;
-  width: 42%;
-  height: 24px;
-  transform: translateX(-50%) rotate(-3deg);
-  background:
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, .18) 0 6px, transparent 6px 12px),
-    rgba(196, 188, 158, .62);
-  clip-path: polygon(0 8%, 4% 0, 8% 10%, 12% 0, 88% 0, 92% 10%, 96% 0, 100% 8%, 100% 92%, 96% 100%, 92% 90%, 88% 100%, 12% 100%, 8% 90%, 4% 100%, 0 92%);
-  box-shadow: 0 1px 2px rgba(60, 45, 25, .15);
-}
-.shot-2 .tape { left: 78%; top: -6px; width: 34%; transform: translateX(-50%) rotate(38deg); background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .2) 0 5px, transparent 5px 10px), rgba(163, 163, 127, .55); }
-.shot-3 .tape { left: 8%; top: -4px; width: 22%; transform: translateX(-50%) rotate(-35deg); }
-.shot-5 .tape { left: 22%; top: -4px; width: 30%; transform: translateX(-50%) rotate(-32deg); }
-.shot-4 .tape { left: 50%; top: -12px; width: 38%; transform: translateX(-50%) rotate(4deg); background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .2) 0 5px, transparent 5px 10px), rgba(163, 163, 127, .55); }
-.scrap-sprig { position: absolute; right: -6%; top: 27%; z-index: 6; width: 22%; transform: rotate(28deg); pointer-events: none; filter: drop-shadow(0 4px 4px rgba(60, 45, 25, .2)); }
+/* cành hoa baby trắng cài quanh album, nằm trên mép ảnh */
+.scrap-sprig { position: absolute; z-index: 6; width: 22%; pointer-events: none; filter: drop-shadow(0 4px 4px rgba(60, 45, 25, .2)); }
+.scrap-sprig-1 { right: -6%; top: 27%; transform: rotate(28deg); }
+.scrap-sprig-2 { left: -1%; top: 60%; width: 20%; transform: scaleX(-1) rotate(24deg); }
 
 /* ảnh lần lượt "rơi" xuống trang khi cuộn tới */
 .gallery .shot { opacity: 0; transform: rotate(calc(var(--rot) * 2.2)) translateY(-26px) scale(1.06); }
@@ -951,12 +782,12 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
   cursor: pointer;
 }
 .gift-sheet .sec-sub { margin-bottom: 20px; }
-.gift-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gift-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .gift-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px 10px 14px;
+  padding: 16px 8px 14px;
   border: 1px solid rgba(180, 154, 106, .45);
   background: rgba(255, 253, 248, .7);
 }
@@ -971,6 +802,12 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
   box-shadow: inset 0 0 0 1px var(--line);
 }
 .gift-qr img { display: block; width: 100%; height: 100%; object-fit: contain; }
+/* ảnh QR ngân hàng là thẻ dọc có sẵn tên và số tài khoản: hiện nguyên thẻ, bo góc */
+.gift-qr:not(.empty) { aspect-ratio: auto; padding: 0; background: none; box-shadow: none; }
+.gift-qr:not(.empty) img { height: auto; border-radius: 3px; box-shadow: 0 3px 10px rgba(60, 45, 25, .18); }
+.gift-card .btn-ghost { width: 100%; padding: 6px 8px; font-size: 10.5px; letter-spacing: .1em; line-height: 1.25; text-align: center; }
+.gift-card .btn-copy { margin-top: 8px; }
+.btn-ghost.btn-copy::after { content: none; }
 .gift-qr.empty { display: grid; place-items: center; padding: 10px; background: repeating-linear-gradient(45deg, #fbf8f2 0 8px, #f4eee4 8px 16px); }
 .gift-qr.empty span { font-size: 13px; font-style: italic; color: var(--muted); }
 .btn-ghost {
@@ -1000,7 +837,7 @@ body.locked { overflow: hidden; height: 100vh; height: 100svh; }
 .lightbox img {
   max-width: 92vw;
   max-height: 82vh;
-  border: 8px solid #fff;
+  border-radius: 2px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
   touch-action: pan-y pinch-zoom;
   user-select: none;
@@ -1041,7 +878,7 @@ form { text-align: left; }
 .field { display: block; margin-bottom: 22px; border: 0; }
 .field > span, .field > legend { display: block; margin-bottom: 4px; font-size: 11px; }
 .field em { font-style: normal; letter-spacing: .1em; text-transform: none; opacity: .8; }
-input[type="text"], select, textarea {
+input[type="text"], textarea {
   width: 100%;
   padding: 10px 2px;
   border: 0;
@@ -1056,14 +893,8 @@ input[type="text"], select, textarea {
   -webkit-appearance: none;
 }
 input::placeholder, textarea::placeholder { color: #b3a894; font-style: italic; }
-select {
-  background-image: linear-gradient(45deg, transparent 50%, var(--olive) 50%), linear-gradient(135deg, var(--olive) 50%, transparent 50%);
-  background-position: calc(100% - 12px) 55%, calc(100% - 7px) 55%;
-  background-size: 5px 5px;
-  background-repeat: no-repeat;
-}
 textarea { resize: vertical; }
-input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: var(--olive); }
+input:focus, textarea:focus { outline: none; border-bottom-color: var(--olive); }
 
 .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
 .choice { position: relative; display: block; cursor: pointer; }
@@ -1086,12 +917,17 @@ input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: 
   transition: border-color .2s, background .2s, color .2s;
 }
 .choice input:checked + span { border-color: var(--olive); background: var(--olive); color: var(--ivory); }
+/* hàng nút số người: 5 nút tròn nhỏ trên một dòng */
+.choices-count { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.choices-count .choice span { min-height: 44px; padding: 0; font-size: 15px; letter-spacing: .04em; }
 .choice input:focus-visible + span { box-shadow: 0 0 0 3px rgba(110, 109, 76, .2); }
 
 .form-status { min-height: 22px; margin-top: 10px; font-size: 15px; font-style: italic; text-align: center; color: var(--olive); }
 .form-status.error { color: #a4523f; }
 
 .thanks { padding: 24px 0 8px; }
+.rsvp.done > .ico, .rsvp.done > .sec-title, .rsvp.done > .sec-sub { display: none; }
+.rsvp.done .thanks { padding: 8px 0; }
 .thanks-title { font-family: var(--script); font-size: 44px; color: var(--title); }
 
 .footer { padding-top: 48px; font-size: 18px; font-style: italic; color: var(--muted); }
@@ -1138,18 +974,18 @@ input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: 
   }
   .intro::before { left: 0; }
   .intro::after { right: 0; transform: scaleX(-1); }
-  .tap-hint { font-size: 24px; }
+  .tap-hint, .scratch-hint { font-size: 24px; }
 
   .photo-card { width: min(40vw, 320px, 40vh); }
   @supports (height: 1svh) {
     .photo-card { width: min(40vw, 320px, 40svh); }
   }
-  .greeting-names { font-size: 60px; }
+  .greeting-names img { width: 420px; }
 
   .details { padding-left: 32px; padding-right: 32px; }
   .sec { max-width: 640px; padding: 72px 0; }
   .family p { font-size: 20px; }
-  .name { font-size: 64px; }
+  .names-art img { width: 520px; }
   .couple { padding: 60px 0 80px; }
   .cal-card { max-width: 440px; padding: 36px 28px 26px; }
   .cal-day { height: 44px; font-size: 19px; }
@@ -1172,6 +1008,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-bottom-color: 
 @keyframes fadeIn { from { opacity: 0; transform: scale(.8); } to { opacity: 1; transform: none; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .tap-hint, .greeting .chev, .gift-art, .seal::after, .music-btn.playing svg, .cal-day.marked::before { animation: none; }
+  .tap-hint, .greeting .chev, .gift-art, .music-btn.playing svg, .cal-day.marked::before { animation: none; }
   .ico { stroke-dasharray: none; transition: none; }
 }
