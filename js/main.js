@@ -82,7 +82,7 @@
   }
 
   function fillContent() {
-    document.title = `Thiệp cưới ${C.groom.short} & ${C.bride.short}`;
+    document.title = "Thiệp mời cưới Hãnh & Lan Anh";
     $$('[data-guest]').forEach((n) => (n.textContent = guest));
     $$('[data-initials]').forEach((n) => (n.textContent = initials));
     $$('[data-letter-date]').forEach((n) => (n.textContent = letterDate()));
