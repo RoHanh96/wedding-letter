@@ -38,7 +38,7 @@ https://<user>.github.io/wedding-letter/?to=Cô-Chú-Tuấn
 
 Nếu link không có `?to=` thì thiệp hiển thị "Bạn".
 
-Khung xem trước khi dán link vào Messenger, Zalo lấy từ các thẻ `og:*` trong `index.html`: tiêu đề, mô tả và ảnh `assets/og-image.jpg` (1200x630). `og:url` trỏ về link gốc không có `?to=`, nên mọi link mời dùng chung một khung xem trước. Sau khi sửa các thẻ này, mở [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), dán link và bấm **Scrape Again** để Messenger cập nhật.
+Khung xem trước khi dán link vào Messenger, Zalo lấy từ các thẻ `og:*` trong `index.html`: tiêu đề, mô tả và ảnh `assets/og-image.jpg` (1200x630). Không thêm `og:url` hay `canonical`: Messenger sẽ mở link đó thay cho link mời nên mất `?to=` và tên khách. Sau khi sửa các thẻ này, mở [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/), dán link và bấm **Scrape Again** để Messenger cập nhật.
 
 ## Chạy thử trên máy
 
